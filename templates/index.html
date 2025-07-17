@@ -6,6 +6,12 @@
   <p>{{ summary }}</p>
   <h2>Skills</h2>
   <ul>{% for skill in skills %}<li>{{ skill }}</li>{% endfor %}</ul>
+  <h2>Educational Qualifications</h2>
+  {% for edu in education %}
+    <h3>Institute Name : {{ edu.Institute_name }}</h3>
+    <p>Degree : {{ edu.Degree_name }}</p>
+    <small>Marks : {{ edu.Marks }}</small>
+  {% endfor %}
   <h2>Work Experience</h2>
   {% for exp in Experience %}
     <h3>{{ exp.Company }}</h3>
@@ -18,8 +24,8 @@
     <p>{{ project.desc }}</p>
     <small>Tech: {{ project.tech | join(', ') }}</small>
   {% endfor %}
-  {% for key in Contact_Info %}
-    <h3>{{ key }} - {{ key[val] }}</h3>
+  {% for key, val in Contact_Info.items() %}
+    <h3>{{ key }} - {{ val }}</h3>
   {% endfor %}
 </body>
 </html>

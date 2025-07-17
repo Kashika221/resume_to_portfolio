@@ -24,8 +24,14 @@ class Experience(BaseModel):
     Company_name : str
     skills_used : list[str]
 
+class Education(BaseModel):
+    Institute_name : str
+    Degree_name : str
+    marks : str
+
 class Candidate(BaseModel):
     name : str
+    Education : List[Education]
     Projects : List[Project]
     Experience : List[Experience]
     Skills : List[str]
@@ -62,17 +68,24 @@ skill_list = []
 for skill in info.Skills:
     skill_list.append(skill)
 
-project_json = []
-for project in info.Projects:
-    temp = {"title" : project.project_name, "desc" : project.about_project, "tech" : list(project.skills_used)}
-    project_json.append(temp)
+education_json = []
+for edu in info.Education:
+    temp = {"Institute_name" : edu.Institute_name, "Degree_name" : edu.Degree_name, "Marks" : edu.marks}
+    education_json.append(temp)
 
 experience_json = []
 for exp in info.Experience:
     temp = {"Company" : exp.Company_name, "Position" : exp.Position_name, "Skills" : list(exp.skills_used)}
     experience_json.append(temp)
 
+project_json = []
+for project in info.Projects:
+    temp = {"title" : project.project_name, "desc" : project.about_project, "tech" : list(project.skills_used)}
+    project_json.append(temp)
+
 contact_json = info.Contact_Info
+
+print(education_json)
 
 app = Flask(__name__)
 
@@ -80,6 +93,7 @@ app = Flask(__name__)
 def home():
     data = {
         "name" : candidate_name,
+        "education" : education_json,
         "Contact_Info" : contact_json,
         "skills" : skill_list,
         "projects" : project_json,
