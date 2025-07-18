@@ -6,7 +6,7 @@ from langchain_groq import ChatGroq
 from typing import List
 import json
 from pydantic import BaseModel
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 load_dotenv()
 
@@ -37,10 +37,6 @@ class Candidate(BaseModel):
     Skills : List[str]
     Contact_Info : dict
 
-with pdfplumber.open("Kashika7Resume.pdf") as pdf:
-    first_page = pdf.pages[0]
-    content = first_page.extract_text(x_tolerance=3, x_tolerance_ratio=None, y_tolerance=3, layout=False, x_density=7.25, y_density=13, line_dir_render=None, char_dir_render=None)
-
 def get_all_info(info: str) -> Candidate:
     chat_completion = client.chat.completions.create(
         messages = [
@@ -61,44 +57,71 @@ def get_all_info(info: str) -> Candidate:
     )
     return Candidate.model_validate_json(chat_completion.choices[0].message.content)
 
-info = get_all_info(content)
-candidate_name = info.name
-
-skill_list = []
-for skill in info.Skills:
-    skill_list.append(skill)
-
-education_json = []
-for edu in info.Education:
-    temp = {"Institute_name" : edu.Institute_name, "Degree_name" : edu.Degree_name, "Marks" : edu.marks}
-    education_json.append(temp)
-
-experience_json = []
-for exp in info.Experience:
-    temp = {"Company" : exp.Company_name, "Position" : exp.Position_name, "Skills" : list(exp.skills_used)}
-    experience_json.append(temp)
-
-project_json = []
-for project in info.Projects:
-    temp = {"title" : project.project_name, "desc" : project.about_project, "tech" : list(project.skills_used)}
-    project_json.append(temp)
-
-contact_json = info.Contact_Info
-
-print(education_json)
-
 app = Flask(__name__)
 
-@app.route("/")
-def home():
-    data = {
+UPLOAD_FOLDER = 'uploads'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+
+ALLOWED_EXTENSIONS = {'pdf'}
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/')
+def upload_form():
+    return render_template('upload.html')
+
+@app.route('/', methods=['POST'])
+def upload_pdf():
+    if 'file' not in request.files:
+        return 'No file part'
+    
+    file = request.files['file']
+
+    if file.filename == '':
+        return 'No selected file'
+
+    if file and allowed_file(file.filename):
+        filepath = os.path.join(app.config['UPLOAD_FOLDER'], file.filename)
+        file.save(filepath)
+        with pdfplumber.open(filepath) as pdf:
+            first_page = pdf.pages[0]
+            content = first_page.extract_text(x_tolerance=3, x_tolerance_ratio=None, y_tolerance=3, layout=False, x_density=7.25, y_density=13, line_dir_render=None, char_dir_render=None)
+        info = get_all_info(content)
+        candidate_name = info.name
+
+        skill_list = []
+        for skill in info.Skills:
+            skill_list.append(skill)
+
+        education_json = []
+        for edu in info.Education:
+            temp = {"Institute_name" : edu.Institute_name, "Degree_name" : edu.Degree_name, "Marks" : edu.marks}
+            education_json.append(temp)
+
+        experience_json = []
+        for exp in info.Experience:
+            temp = {"Company" : exp.Company_name, "Position" : exp.Position_name, "Skills" : list(exp.skills_used)}
+            experience_json.append(temp)
+
+        project_json = []
+        for project in info.Projects:
+            temp = {"title" : project.project_name, "desc" : project.about_project, "tech" : list(project.skills_used)}
+            project_json.append(temp)
+
+        contact_json = info.Contact_Info
+
+        data = {
         "name" : candidate_name,
         "education" : education_json,
         "Contact_Info" : contact_json,
         "skills" : skill_list,
         "projects" : project_json,
         "Experience" : experience_json
-    }
-    return render_template("index.html", **data)
+        }
+        return render_template("index.html", **data)
+
+    return 'Invalid file type'
 
 app.run(debug = True)

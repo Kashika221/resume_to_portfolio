@@ -12,12 +12,14 @@
     <p>Degree : {{ edu.Degree_name }}</p>
     <small>Marks : {{ edu.Marks }}</small>
   {% endfor %}
-  <h2>Work Experience</h2>
-  {% for exp in Experience %}
-    <h3>{{ exp.Company }}</h3>
-    <p>{{ exp.Position }}</p>
-    <small>Tech: {{ exp.Skills | join(', ') }}</small>
-  {% endfor %}
+  {% if Experience | length > 0 %}
+    <h2>Work Experience</h2>
+    {% for exp in Experience %}
+      <h3>{{ exp.Company }}</h3>
+      <p>{{ exp.Position }}</p>
+      <small>Tech: {{ exp.Skills | join(', ') }}</small>
+    {% endfor %}
+  {% endif %}
   <h2>Projects</h2>
   {% for project in projects %}
     <h3>{{ project.title }}</h3>
