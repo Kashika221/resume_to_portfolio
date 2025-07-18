@@ -19,6 +19,11 @@ class Project(BaseModel):
     about_project : str
     skills_used : list[str]
 
+class Achivements(BaseModel):
+    Achivement_name : str
+    institute_name : str
+    about : str
+
 class Experience(BaseModel):
     Position_name : str
     Company_name : str
@@ -29,12 +34,19 @@ class Education(BaseModel):
     Degree_name : str
     marks : str
 
+class Position_of_Responsibility(BaseModel):
+    Position_name : str
+    Society_name : str
+    Description : str
+
 class Candidate(BaseModel):
     name : str
     Education : List[Education]
     Projects : List[Project]
     Experience : List[Experience]
+    Achivements : List[Achivements]
     Skills : List[str]
+    Position_of_Responsibility : List[Position_of_Responsibility]
     Contact_Info : dict
 
 def get_all_info(info: str) -> Candidate:
@@ -105,6 +117,16 @@ def upload_pdf():
             temp = {"Company" : exp.Company_name, "Position" : exp.Position_name, "Skills" : list(exp.skills_used)}
             experience_json.append(temp)
 
+        achievement_json = []
+        for achievement in info.Achivements:
+            temp = {"achievement_name" : achievement.Achivement_name, "institute_name" : achievement.institute_name, "description" : achievement.about}
+            achievement_json.append(temp)
+
+        position_of_responsibility_json = []
+        for responsibility in info.Position_of_Responsibility:
+            temp = {"position_name" : responsibility.Position_name, "soc_name" : responsibility.Society_name, "description" : responsibility.Description}
+            position_of_responsibility_json.append(temp)
+
         project_json = []
         for project in info.Projects:
             temp = {"title" : project.project_name, "desc" : project.about_project, "tech" : list(project.skills_used)}
@@ -118,7 +140,9 @@ def upload_pdf():
         "Contact_Info" : contact_json,
         "skills" : skill_list,
         "projects" : project_json,
-        "Experience" : experience_json
+        "Experience" : experience_json,
+        "Achievements" : achievement_json,
+        "Position_of_responsibility" : position_of_responsibility_json
         }
         return render_template("index.html", **data)
 

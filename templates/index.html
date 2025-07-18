@@ -3,15 +3,19 @@
 <head><title>{{ name }}'s Portfolio</title></head>
 <body>
   <h1>{{ name }}</h1>
+
   <p>{{ summary }}</p>
+
   <h2>Skills</h2>
   <ul>{% for skill in skills %}<li>{{ skill }}</li>{% endfor %}</ul>
+
   <h2>Educational Qualifications</h2>
   {% for edu in education %}
     <h3>Institute Name : {{ edu.Institute_name }}</h3>
     <p>Degree : {{ edu.Degree_name }}</p>
     <small>Marks : {{ edu.Marks }}</small>
   {% endfor %}
+
   {% if Experience | length > 0 %}
     <h2>Work Experience</h2>
     {% for exp in Experience %}
@@ -20,14 +24,35 @@
       <small>Tech: {{ exp.Skills | join(', ') }}</small>
     {% endfor %}
   {% endif %}
+
+  {% if Achievements | length > 0 %}
+    <h2>Achievements</h2>
+    {% for achievement in Achievements %}
+      <h3>{{ achievement.achievement_name }}</h3>
+      <p>Offered By : {{ achievement.institute_name }}</p>
+      <small>Description : {{ achievement.description }}</small>
+    {% endfor %}
+  {% endif %}
+
   <h2>Projects</h2>
   {% for project in projects %}
     <h3>{{ project.title }}</h3>
     <p>{{ project.desc }}</p>
     <small>Tech: {{ project.tech | join(', ') }}</small>
   {% endfor %}
+
+  {% if Position_of_responsibility | length > 0 %}
+    <h2>Position of Responsibility</h2>
+    {% for responsibility in Position_of_responsibility %}
+      <h3>{{ responsibility.responsibility_name }}</h3>
+      <p>Society Name : {{ responsibility.soc_name }}</p>
+      <small>Description : {{ responsibility.description }}</small>
+    {% endfor %}
+  {% endif %}
+
   {% for key, val in Contact_Info.items() %}
     <h3>{{ key }} - {{ val }}</h3>
   {% endfor %}
+
 </body>
 </html>
