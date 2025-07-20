@@ -1,58 +1,267 @@
 <!DOCTYPE html>
 <html>
-<head><title>{{ name }}'s Portfolio</title></head>
+<head>
+  <title>{{ name }}'s Portfolio</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    :root {
+        --accent: #36e0ff;
+        --primary: #001526;
+        --glass: rgba(255,255,255,0.18);
+        --shadow: 0 8px 32px 0 rgba(31,38,135,0.37);
+        --border: rgba(255,255,255,0.15);
+        --gradient: linear-gradient(135deg, #36e0ff 0%, #c471f5 100%);
+        --3d-btn: linear-gradient(145deg, #41e7f6 25%, #a763e7 100%);
+    }
+    body {
+      min-height: 100vh;
+      margin: 0;
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: radial-gradient(ellipse at top left, #181f3c 44%, #385565), var(--gradient);
+      background-size: cover;
+      color: #ffffffdd;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      animation: bgmove 24s linear infinite;
+    }
+    @keyframes bgmove {
+      0% { background-position: 0 0, 0 0;}
+      100% { background-position: 100vw 100vh, 200vw 100vh;}
+    }
+    .container {
+      max-width: 850px;
+      margin: 40px auto;
+      background: var(--glass);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+      border-radius: 35px;
+      border: 2px solid var(--border);
+      padding: 3rem 2.5rem 2rem 2.5rem;
+      position: relative;
+      margin-bottom: 80px;
+      animation: appear 1s cubic-bezier(0.23, 1, 0.32, 1);
+    }
+    @keyframes appear {
+      from { opacity: 0; transform: translateY(40px) scale(0.98);}
+      to { opacity: 1; transform: translateY(0) scale(1);}
+    }
+    h1 {
+      font-size: 3rem;
+      font-weight: bold;
+      color: #daf6ff;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 1rem;
+      text-align: center;
+      letter-spacing: 2px;
+      filter: drop-shadow(1px 3px 6px #00056460);
+      text-shadow: 0px 2px 16px #36e0ffa8;
+      transition: color .3s;
+    }
+    h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-top: 2.5rem;
+      margin-bottom: 0.5rem;
+      color: #fff5;
+      background: var(--gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: 1.5px;
+      position: relative;
+      text-shadow: 0px 2px 12px #36e0ff66;
+      border-bottom: 2px solid #41e7f610;
+      padding-bottom: 6px;
+    }
+    h3 {
+      font-size: 1.22rem;
+      margin-top: 1.5rem;
+      margin-bottom: .25rem;
+      color: #f7fee7;
+      letter-spacing: 1.2px;
+      text-shadow: 0 6px 20px #41e7f64d;
+      font-weight: 700;
+    }
+    ul {
+      padding-left: 1.6rem;
+    }
+    li {
+      margin-bottom: 0.4em;
+      font-size: 1.11em;
+      position: relative;
+      color: #b9e6fc;
+      padding-left: 0.6em;
+    }
+    li:before {
+      content: '';
+      display: inline-block;
+      width: 0.5em;
+      height: 0.5em;
+      background: var(--gradient);
+      border-radius: 50%;
+      margin-right: 0.7em;
+      box-shadow: 0 0 7px #36e0ff77, 0 2px 8px #0003;
+      vertical-align: middle;
+      animation: pulse 2s infinite alternate;
+    }
+    @keyframes pulse {
+      to { box-shadow: 0 0 14px #c471f5cc, 0 4px 16px #0005;}
+    }
+    small {
+      font-size: 0.99rem;
+      color: #c4eafd;
+      opacity: .7;
+      padding-left: 5px;
+    }
+    p {
+      font-size: 1.11rem;
+      margin-bottom: .60rem;
+      margin-top: 4px;
+      color: #dcf6fee0;
+      text-shadow: 0 1px 8px #2223;
+    }
+    .tag {
+      background: var(--gradient);
+      color: #22303099;
+      padding: 0.23em .6em;
+      margin: 0 0.21em;
+      font-size: .93em;
+      border-radius: 7px;
+      box-shadow: 0 2px 8px #41e7f625;
+      display: inline-block;
+    }
+    .project, .work, .achievement, .edu, .resp {
+      margin-bottom: 1.15rem;
+      background: linear-gradient(112deg, #21296e48 20%, #c471f50a 100%);
+      border-radius: 18px;
+      padding: 1rem 1.33rem;
+      box-shadow: 0 3px 13px 0 #36e0ff22;
+      position: relative;
+      transition: transform .2s cubic-bezier(.4,.9,.5,1);
+      border: 1.5px solid #41e7f615;
+      margin-top: 1.12rem;
+    }
+    .project:hover, .work:hover, .achievement:hover, .edu:hover, .resp:hover {
+      transform: scale(1.03) translateY(-3px) rotateY(4deg);
+      box-shadow: 0 12px 48px 0 #41e7f634;
+      z-index: 2;
+    }
+    /* Contact Info */
+    .contact-row {
+      margin-top: 2.2rem;
+      border-top: 1.5px solid #36e0ff33;
+      padding-top: 2rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 40px 3vw;
+      justify-content: center;
+    }
+    .contact-block {
+      flex: 0 1 230px;
+      background: var(--glass);
+      border-radius: 15px;
+      box-shadow: 0 1px 15px #38556530;
+      border: 1px solid #41e7f612;
+      padding: 1.15em 1.2em;
+      margin-bottom: 5px;
+      backdrop-filter: blur(9px);
+      transition: background .3s;
+    }
+    .contact-block:hover {
+      background: #29296e22;
+      box-shadow: 0 3px 18px #36e0ff28;
+    }
+    .contact-key {
+      color: #fff8;
+      font-weight: 700;
+      font-size: 1.1em;
+    }
+    .contact-val {
+      color: #8df2ff;
+      word-break: break-all;
+      font-size: .95em;
+    }
+
+    /* Responsive */
+    @media (max-width: 700px) {
+      .container { padding: 1.1em .6em; }
+      h1 {font-size: 230%;}
+      h2 {font-size: 1.2rem;}
+      .project,.work,.achievement,.edu,.resp {padding: .79rem .6rem;}
+      .contact-row { gap: 25px 2vw;}
+    }
+  </style>
+</head>
 <body>
-  <h1>{{ name }}</h1>
+  <div class="container">
+    <h1>{{ name }}</h1>
+    <p>{{ summary }}</p>
 
-  <p>{{ summary }}</p>
+    <h2>Skills</h2>
+    <ul>{% for skill in skills %}<li>{{ skill }}</li>{% endfor %}</ul>
 
-  <h2>Skills</h2>
-  <ul>{% for skill in skills %}<li>{{ skill }}</li>{% endfor %}</ul>
-
-  <h2>Educational Qualifications</h2>
-  {% for edu in education %}
-    <h3>Institute Name : {{ edu.Institute_name }}</h3>
-    <p>Degree : {{ edu.Degree_name }}</p>
-    <small>Marks : {{ edu.Marks }}</small>
-  {% endfor %}
-
-  {% if Experience | length > 0 %}
-    <h2>Work Experience</h2>
-    {% for exp in Experience %}
-      <h3>{{ exp.Company }}</h3>
-      <p>{{ exp.Position }}</p>
-      <small>Tech: {{ exp.Skills | join(', ') }}</small>
+    <h2>Educational Qualifications</h2>
+    {% for edu in education %}
+      <div class="edu">
+        <h3>Institute Name : {{ edu.Institute_name }}</h3>
+        <p>Degree : {{ edu.Degree_name }}</p>
+        <small>Marks : {{ edu.Marks }}</small>
+      </div>
     {% endfor %}
-  {% endif %}
 
-  {% if Achievements | length > 0 %}
-    <h2>Achievements</h2>
-    {% for achievement in Achievements %}
-      <h3>{{ achievement.achievement_name }}</h3>
-      <p>Offered By : {{ achievement.institute_name }}</p>
-      <small>Description : {{ achievement.description }}</small>
+    {% if Experience | length > 0 %}
+      <h2>Work Experience</h2>
+      {% for exp in Experience %}
+        <div class="work">
+          <h3>{{ exp.Company }}</h3>
+          <p>{{ exp.Position }}</p>
+          <small>Tech: {{ exp.Skills | join(', ') }}</small>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    {% if Achievements | length > 0 %}
+      <h2>Achievements</h2>
+      {% for achievement in Achievements %}
+        <div class="achievement">
+          <h3>{{ achievement.achievement_name }}</h3>
+          <p>Offered By : {{ achievement.institute_name }}</p>
+          <small>Description : {{ achievement.description }}</small>
+        </div>
+      {% endfor %}
+    {% endif %}
+
+    <h2>Projects</h2>
+    {% for project in projects %}
+      <div class="project">
+        <h3>{{ project.title }}</h3>
+        <p>{{ project.desc }}</p>
+        <small>Tech: {{ project.tech | join(', ') }}</small>
+      </div>
     {% endfor %}
-  {% endif %}
 
-  <h2>Projects</h2>
-  {% for project in projects %}
-    <h3>{{ project.title }}</h3>
-    <p>{{ project.desc }}</p>
-    <small>Tech: {{ project.tech | join(', ') }}</small>
-  {% endfor %}
+    {% if Position_of_responsibility | length > 0 %}
+      <h2>Position of Responsibility</h2>
+      {% for responsibility in Position_of_responsibility %}
+        <div class="resp">
+          <h3>{{ responsibility.responsibility_name }}</h3>
+          <p>Society Name : {{ responsibility.soc_name }}</p>
+          <small>Description : {{ responsibility.description }}</small>
+        </div>
+      {% endfor %}
+    {% endif %}
 
-  {% if Position_of_responsibility | length > 0 %}
-    <h2>Position of Responsibility</h2>
-    {% for responsibility in Position_of_responsibility %}
-      <h3>{{ responsibility.responsibility_name }}</h3>
-      <p>Society Name : {{ responsibility.soc_name }}</p>
-      <small>Description : {{ responsibility.description }}</small>
-    {% endfor %}
-  {% endif %}
-
-  {% for key, val in Contact_Info.items() %}
-    <h3>{{ key }} - {{ val }}</h3>
-  {% endfor %}
-
+    <div class="contact-row">
+      {% for key, val in Contact_Info.items() %}
+        <div class="contact-block">
+          <span class="contact-key">{{ key }}</span>
+          <div class="contact-val">{{ val }}</div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
 </body>
 </html>
