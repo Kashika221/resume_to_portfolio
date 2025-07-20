@@ -1,9 +1,403 @@
 <!DOCTYPE html>
 <html>
+    <style>
+/* Reset & Typography */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body, html {
+    height: 100%;
+    overflow-x: hidden;
+    /* Lighter background gradient */
+    background: linear-gradient(135deg, #aabdff, #c9b6ff);
+    position: relative;
+}
+
+/* Floating circles background base with lighter colors */
+body::before, body::after {
+    content: '';
+    position: fixed;
+    border-radius: 50%;
+    opacity: 0.12; /* slightly less opaque */
+    filter: blur(70px);
+    animation-timing-function: ease-in-out;
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+    z-index: 0;
+}
+
+body::before {
+    width: 350px;
+    height: 350px;
+    background: #ffa3ac;
+    top: 15%;
+    left: 10%;
+    animation-name: float1;
+    animation-duration: 7s;
+}
+
+body::after {
+    width: 500px;
+    height: 500px;
+    background: #9a6fff;
+    top: 75%;
+    right: 8%;
+    animation-name: float2;
+    animation-duration: 10s;
+}
+
+@keyframes float1 {
+    0% { transform: translateY(0) translateX(0) scale(1); }
+    100% { transform: translateY(-25px) translateX(20px) scale(1.1); }
+}
+
+@keyframes float2 {
+    0% { transform: translateY(0) translateX(0) scale(1); }
+    100% { transform: translateY(30px) translateX(-25px) scale(1.07); }
+}
+
+/* Container for bouncing balls */
+.balls-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none; /* So clicks pass through */
+    overflow: visible;
+    z-index: 0;
+}
+
+/* Common styles for balls */
+.ball {
+    position: absolute;
+    border-radius: 50%;
+    /* Increased opacity */
+    opacity: 0.4;
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.12));
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    animation-iteration-count: infinite;
+    animation-direction: alternate;
+}
+
+/* Balls with varied sizes, colors, positions, and animations */
+
+.ball1 {
+    width: 110px;
+    height: 110px;
+    background: #FF4E50; /* Red */
+    top: 8%;
+    left: 12%;
+    animation-name: bounce1, moveX1;
+    animation-duration: 4.5s, 15s;
+    animation-timing-function: cubic-bezier(0.25, 0.46, 0.45, 0.94), linear;
+}
+
+.ball2 {
+    width: 80px;
+    height: 80px;
+    background: #FC913A; /* Orange */
+    top: 72%;
+    left: 28%;
+    animation-name: bounce2, moveX2;
+    animation-duration: 4.2s, 18s;
+    animation-timing-function: ease-in-out, linear;
+    animation-delay: 1s, 0s;
+}
+
+.ball3 {
+    width: 130px;
+    height: 130px;
+    background: #FFFA65; /* Yellow */
+    top: 38%;
+    left: 78%;
+    animation-name: bounce3, moveX3;
+    animation-duration: 5.5s, 20s;
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1), linear;
+    animation-delay: 0.5s, 2s;
+}
+
+.ball4 {
+    width: 90px;
+    height: 90px;
+    background: #24FFBD; /* Green */
+    top: 82%;
+    left: 62%;
+    animation-name: bounce4, moveX4;
+    animation-duration: 4s, 16s;
+    animation-timing-function: ease-in-out, linear;
+}
+
+/* Additional balls: 5 to 8 */
+
+.ball5 {
+    width: 100px;
+    height: 100px;
+    background: #4A90E2; /* Blue */
+    top: 55%;
+    left: 15%;
+    animation-name: bounce5, moveX5;
+    animation-duration: 4.8s, 17s;
+    animation-timing-function: ease-in-out, linear;
+    animation-delay: 0.3s, 1s;
+}
+
+.ball6 {
+    width: 120px;
+    height: 120px;
+    background: #9B59B6; /* Purple */
+    top: 20%;
+    left: 55%;
+    animation-name: bounce6, moveX6;
+    animation-duration: 5s, 19s;
+    animation-timing-function: cubic-bezier(0.4, 0, 0.2, 1), linear;
+    animation-delay: 0s, 1.5s;
+}
+
+.ball7 {
+    width: 85px;
+    height: 85px;
+    background: #F39C12; /* Dark Orange */
+    top: 68%;
+    left: 85%;
+    animation-name: bounce7, moveX7;
+    animation-duration: 4.3s, 21s;
+    animation-timing-function: ease-in-out, linear;
+    animation-delay: 0.7s, 0s;
+}
+
+.ball8 {
+    width: 95px;
+    height: 95px;
+    background: #2ECC71; /* Emerald */
+    top: 12%;
+    left: 80%;
+    animation-name: bounce8, moveX8;
+    animation-duration: 4.6s, 14s;
+    animation-timing-function: cubic-bezier(0.42, 0, 0.58, 1), linear;
+    animation-delay: 0, 0.8s;
+}
+
+/* Bounce vertical animations */
+
+@keyframes bounce1 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-55px); }
+}
+
+@keyframes bounce2 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-40px); }
+}
+
+@keyframes bounce3 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-65px); }
+}
+
+@keyframes bounce4 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-45px); }
+}
+
+@keyframes bounce5 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-50px); }
+}
+
+@keyframes bounce6 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-60px); }
+}
+
+@keyframes bounce7 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-42px); }
+}
+
+@keyframes bounce8 {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-48px); }
+}
+
+/* Horizontal movements */
+
+@keyframes moveX1 {
+    0%, 100% { left: 12%; }
+    50% { left: 22%; }
+}
+
+@keyframes moveX2 {
+    0%, 100% { left: 28%; }
+    50% { left: 38%; }
+}
+
+@keyframes moveX3 {
+    0%, 100% { left: 78%; }
+    50% { left: 68%; }
+}
+
+@keyframes moveX4 {
+    0%, 100% { left: 62%; }
+    50% { left: 52%; }
+}
+
+@keyframes moveX5 {
+    0%, 100% { left: 15%; }
+    50% { left: 25%; }
+}
+
+@keyframes moveX6 {
+    0%, 100% { left: 55%; }
+    50% { left: 45%; }
+}
+
+@keyframes moveX7 {
+    0%, 100% { left: 85%; }
+    50% { left: 95%; }
+}
+
+@keyframes moveX8 {
+    0%, 100% { left: 80%; }
+    50% { left: 70%; }
+}
+
+/* Center the form container */
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    padding: 20px;
+    z-index: 1; /* Above balls container */
+}
+
+/* Form container with 3D effect */
+form {
+    background: #fff;
+    padding: 40px 50px;
+    border-radius: 20px;
+    width: 100%;
+    max-width: 420px;
+    box-shadow:
+      0 4px 8px rgba(0,0,0,0.1),
+      0 12px 24px rgba(0,0,0,0.1);
+    transform-style: preserve-3d;
+    transition: transform 0.35s ease, box-shadow 0.35s ease;
+    position: relative;
+    z-index: 2;
+}
+
+/* 3D hover effect */
+form:hover {
+    transform: translateZ(40px) translateY(-8px);
+    box-shadow:
+      0 12px 20px rgba(0,0,0,0.15),
+      0 40px 60px rgba(0,0,0,0.15);
+}
+
+/* Heading styling */
+h1 {
+    text-align: center;
+    margin-bottom: 30px;
+    color: #4a4a4a;
+    font-weight: 700;
+    font-size: 2.25rem;
+    letter-spacing: 1px;
+    text-shadow:
+      0 1px 1px rgba(0,0,0,0.05);
+}
+
+/* File input styling */
+input[type="file"] {
+    padding: 15px 20px;
+    border: 2px solid #d1d1d1;
+    border-radius: 12px;
+    font-size: 17px;
+    cursor: pointer;
+    transition: border-color 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.07);
+    background: #fafafa;
+    outline-offset: 3px;
+}
+
+/* Hover and focus states for file input */
+input[type="file"]:hover,
+input[type="file"]:focus {
+    border-color: #764ba2;
+    box-shadow: 0 0 8px rgba(118,75,162,0.6);
+    outline: none;
+    background: #fff;
+}
+
+/* Submit button styling */
+input[type="submit"] {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #ff6a88, #ff99ac);
+    color: white;
+    font-weight: 700;
+    font-size: 18px;
+    padding: 16px 0;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow:
+      0 6px 15px rgba(255, 106, 136, 0.5);
+    transition: background 0.4s ease, box-shadow 0.4s ease, transform 0.2s ease;
+}
+
+/* Hover and focus states for submit button */
+input[type="submit"]:hover,
+input[type="submit"]:focus {
+    background: linear-gradient(135deg, #ff99ac, #ff6a88);
+    box-shadow:
+      0 8px 20px rgba(255, 153, 172, 0.7);
+    transform: translateY(-3px);
+    outline: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+    form {
+        padding: 30px 25px;
+        max-width: 100%;
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 1.75rem;
+    }
+
+    input[type="file"] {
+        font-size: 15px;
+        padding: 12px 15px;
+    }
+
+    input[type="submit"] {
+        font-size: 16px;
+        padding: 14px 0;
+    }
+}
+    </style>
 <head>
     <title>Upload PDF</title>
 </head>
 <body>
+    <div class="balls-container">
+        <div class="ball ball1"></div>
+        <div class="ball ball2"></div>
+        <div class="ball ball3"></div>
+        <div class="ball ball4"></div>
+        <div class="ball ball5"></div>
+        <div class="ball ball6"></div>
+        <div class="ball ball7"></div>
+        <div class="ball ball8"></div>
+    </div>
+
     <h1>Upload a PDF</h1>
     <form method="POST" enctype="multipart/form-data">
         <input type="file" name="file" accept="application/pdf">
